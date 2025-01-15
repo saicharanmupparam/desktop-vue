@@ -1,0 +1,3 @@
+<template>
+    Home Works!
+</template>
