@@ -1,3 +1,1 @@
-<template>
-    Home Works!
-</template>
+<template>Home Works!</template>

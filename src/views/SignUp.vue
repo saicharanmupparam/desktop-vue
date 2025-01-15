@@ -1,3 +1,1 @@
-<template>
-    Sign Up Works!
-</template>
+<template>Sign Up Works!</template>

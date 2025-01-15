@@ -1,51 +1,72 @@
 <template>
-    <div>
-        <v-img class="mx-auto my-6" max-width="228"
-            src="https://cdn.vuetifyjs.com/docs/images/logos/vuetify-logo-v3-slim-text-light.svg"></v-img>
-
-        <v-card class="mx-auto pa-12 pb-8" elevation="8" max-width="448" rounded="lg">
-            <div class="text-subtitle-1 text-medium-emphasis">Account</div>
-
-            <v-text-field density="compact" placeholder="Email address" prepend-inner-icon="mdi-email-outline"
-                variant="outlined"></v-text-field>
-
-            <div class="text-subtitle-1 text-medium-emphasis d-flex align-center justify-space-between">
-                Password
-
-                <a class="text-caption text-decoration-none text-blue" href="#" rel="noopener noreferrer"
-                    target="_blank">
-                    Forgot login password?</a>
-            </div>
-
-            <v-text-field :append-inner-icon="visible ? 'mdi-eye-off' : 'mdi-eye'" :type="visible ? 'text' : 'password'"
-                density="compact" placeholder="Enter your password" prepend-inner-icon="mdi-lock-outline"
-                variant="outlined" @click:append-inner="visible = !visible"></v-text-field>
-
-            <v-card class="mb-12" color="surface-variant" variant="tonal">
-                <v-card-text class="text-medium-emphasis text-caption">
-                    Warning: After 3 consecutive failed login attempts, you account will be temporarily locked for three
-                    hours. If you must login now, you can also click "Forgot login password?" below to reset the login
-                    password.
-                </v-card-text>
-            </v-card>
-
-            <v-btn class="mb-8" color="blue" size="large" variant="tonal" block>
-                Log In
-            </v-btn>
-
-            <v-card-text class="text-center">
-                <a class="text-blue text-decoration-none" href="#" rel="noopener noreferrer" target="_blank">
-                    Sign up now <v-icon icon="mdi-chevron-right"></v-icon>
-                </a>
-            </v-card-text>
-        </v-card>
-    </div>
+    <v-form v-model="form" @submit.prevent="onSubmit">
+        <v-container class="bg-surface-light">
+            <v-row class="ga-1 align-center" no-gutters>
+                <v-text-field clearable variant="solo-filled" class="mb-2" label="Username" :disabled="loading"
+                    :rules="[required]" v-model="email"></v-text-field>
+                <v-text-field clearable variant="solo-filled" class="mb-2" label="Password" :disabled="loading"
+                    :rules="[required]" v-model="password"></v-text-field>
+                <v-btn class="bg-primary" variant="outlined" type="submit">Login</v-btn>
+            </v-row>
+            <v-progress-linear class="bg-primary" :indeterminate="loading"></v-progress-linear>
+        </v-container>
+    </v-form>
 </template>
 
-<script>
-export default {
-    data: () => ({
-        visible: false,
-    }),
+<script setup lang="ts">
+import { ref } from 'vue';
+import loginService from '../services/login.service';
+import type { Login } from '../interfaces';
+
+const form = ref(false);
+const loading = ref(false);
+const email = ref('')
+const password = ref(null)
+
+function onSubmit() {
+    if (!email.value) return;
+    loading.value = true;
+    if (email.value && password.value) {
+        verifyUser({ email: email.value, token: password.value })
+    } else {
+        fetchData(email.value)
+    }
 }
+
+async function fetchData(email: string) {
+    try {
+        const { data, error } = await loginService.login({ email });
+        console.log('Sign In:', data, error);
+        loading.value = false;
+    } catch (error) {
+        console.error('Sign In Error:', error);
+        loading.value = false;
+    }
+}
+
+async function verifyUser(form: Login) {
+    try {
+        const { data, error } = await loginService.verify(form);
+        console.log('Verify:', data, error);
+        loading.value = false;
+    } catch (error) {
+        console.error('Verify Error:', error);
+        loading.value = false;
+    }
+}
+
+function required(v: string) {
+    return !!v || 'Field is required';
+}
+
 </script>
+
+<style lang="scss" scoped>
+@media (max-width: 1024px) {
+    .v-row {
+        >* {
+            width: 100%;
+        }
+    }
+}
+</style>
