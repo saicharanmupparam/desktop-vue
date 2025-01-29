@@ -27,13 +27,14 @@ const toggle = ref(false)
 const router = useRouter();
 
 function onSubmit() {
-    if (!email.value) return;
-    loading.value = true;
-    if (email.value && password.value) {
-        verifyUser({ email: email.value, token: password.value })
-    } else {
-        fetchData(email.value)
-    }
+    // if (!email.value) return;
+    // loading.value = true;
+    // if (email.value && password.value) {
+    //     verifyUser({ email: email.value, token: password.value })
+    // } else {
+    //     fetchData(email.value)
+    // }
+    router.push('home')
 }
 
 async function fetchData(email: string) {
