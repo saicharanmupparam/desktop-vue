@@ -1,56 +1,35 @@
+<script setup lang="ts">
+import NavBar from '../components/NavBar.vue';
+import ViewDialog from '../components/ViewDialog.vue';
+</script>
+
 <template>
-    <div class="home h-100 d-flex flex-column">
+    <NavBar :isLoggedIn="true" />
+    <div class="home flex column">
+        <div class="flex1 o-auto">
+            <ViewDialog title="Profile">
+                <div>
+                    <input type="text" name="text" placeholder="Text" aria-label="Text">
+                    <input type="email" name="email" placeholder="Email" aria-label="Email" autocomplete="email">
+                    <input type="number" name="number" placeholder="Number" aria-label="Number">
+                    <input type="password" name="password" placeholder="Password" aria-label="Password">
+                    <input type="tel" name="tel" placeholder="Tel" aria-label="Tel" autocomplete="tel">
+                    <input type="url" name="url" placeholder="Url" aria-label="Url">
+                </div>
 
-        <div class="content flex-sm-1-1-0">
-            <Dialog />
-        </div>
-
-        <footer class="menu-bar">
-            <v-menu>
-                <template v-slot:activator="{ props }">
-                    <v-btn color="primary" density="default" v-bind="props" icon="mdi-menu"></v-btn>
+                <template v-slot:footer>
+                    <!-- content for the footer slot -->
+                     <button :aria-busy="false" aria-label="Please wait…">Save</button>
                 </template>
-                <v-list>
-                    <v-list-item v-for="(item, index) in items" :key="index" :value="index">
-                        <v-list-item-title>
-                            <v-btn :icon="`mdi-${item.title}`" variant="text"></v-btn>
-                        </v-list-item-title>
-                    </v-list-item>
-                </v-list>
-            </v-menu>
-
-            <div class="menus flex-sm-1-1-0"> Menu Items </div>
-            <v-btn class="bg-primary" variant="outlined" type="button" @click="logout">Logout</v-btn>
-        </footer>
+            </ViewDialog>
+            <ViewDialog title="Settings" />
+            <ViewDialog title="Logout" />
+        </div>
     </div>
 </template>
 
-<script setup lang="ts">
-import { useRouter } from 'vue-router';
-import Dialog from '../components/Dialog.vue'
-
-const router = useRouter();
-const items = [
-    { title: 'mdiNotes' },
-    { title: 'mdiAccount' },
-    { title: '' },
-    { title: '' },
-]
-
-function logout() {
-    router.push('/')
-}
-</script>
-
 <style lang="scss" scoped>
-.content {
-    border: 1px solid;
-    border-radius: 5px;
-}
-
-footer.menu-bar {
-    display: flex;
-    align-items: center;
-    padding: 0.5rem;
+.home {
+    height: 100%;
 }
 </style>

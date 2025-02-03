@@ -10,12 +10,11 @@
     "format": "prettier --write src/"
   },
   "dependencies": {
-    "@mdi/font": "^7.4.47",
+    "@picocss/pico": "^2.0.6",
     "@supabase/supabase-js": "^2.47.14",
-    "vite-plugin-vuetify": "^2.0.4",
     "vue": "^3.5.13",
     "vue-router": "4.5.0",
-    "vuetify": "^3.7.6"
+    "vuedraggable": "^2.24.3"
   },
   "devDependencies": {
     "@vitejs/plugin-vue": "^5.2.1",
