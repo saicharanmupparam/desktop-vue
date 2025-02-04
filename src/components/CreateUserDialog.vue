@@ -14,15 +14,13 @@ const helpers = {
   invalid: "Please provide a valid value!",
 };
 
-const user = computed(() => {
-  return {
-    email: email.value,
-    password: password.value,
-    phone: phoneNumber.value,
-    firstname: firstname.value,
-    lastname: lastname.value,
-  };
-});
+const user = computed(() => ({
+  email: email.value,
+  password: password.value,
+  phone: phoneNumber.value,
+  firstname: firstname.value,
+  lastname: lastname.value,
+}));
 
 const validateEmail = (value: string) => {
   const regex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
@@ -30,13 +28,13 @@ const validateEmail = (value: string) => {
 };
 
 const confirmRef = computed(() => {
-  return !validateEmail(email.value) ||
+  return (
+    !validateEmail(email.value) ||
     !password.value ||
     !phoneNumber.value ||
     !firstname.value ||
     !lastname.value
-    ? true
-    : false;
+  );
 });
 
 // First Name
