@@ -4,8 +4,9 @@ export interface User {
   firstname: string;
   id: number;
   lastname: string;
-  mobile: number | null;
+  phone: string;
   username: string;
+  password: string;
 }
 
 export interface Login {
