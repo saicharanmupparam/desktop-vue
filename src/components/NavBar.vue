@@ -1,7 +1,9 @@
 <template>
     <nav>
         <ul>
-            <li><strong>{{ isLoggedIn ? `Hello ${user}` : 'Login To Profile' }}</strong></li>
+            <li>
+                <strong>{{ isLoggedIn ? `Hello ${user}` : "Login To Profile" }}</strong>
+            </li>
         </ul>
         <ul>
             <li v-if="isLoggedIn">
@@ -15,8 +17,8 @@
 </template>
 
 <script setup lang="ts">
-import { ref, watch } from 'vue';
-import type { DropDown as DD } from "../interfaces";
+import { computed, onMounted, ref } from "vue";
+import type { Session, DropDown as DD } from "../interfaces";
 import DropDown from "./DropDown.vue";
 import ThemeSwitcher from "./ThemeSwitcher.vue";
 
@@ -40,10 +42,14 @@ const dropdown: DD = {
     ],
 };
 
-const session = ref(JSON.parse(localStorage.getItem('session') || '{}'));
-const user = ref(session.value.first_name);
+const session = ref<Session>({});
 
-watch(session, (newSession) => {
-    user.value = newSession.first_name;
+onMounted(() => {
+    const storedSession = localStorage.getItem("session");
+    if (storedSession) {
+        session.value = JSON.parse(storedSession) || {};
+    }
 });
+
+const user = computed(() => session.value?.first_name || "Guest");
 </script>
