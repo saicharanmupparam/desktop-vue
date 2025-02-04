@@ -2,7 +2,7 @@
 import { computed, ref } from "vue";
 import DialogWithBackdrop from "./DialogWithBackdrop.vue";
 
-const props = defineProps(["isDialog"]);
+const props = defineProps<{ isDialog: boolean }>();
 
 const firstname = ref("");
 const lastname = ref("");
@@ -22,7 +22,7 @@ const user = computed(() => ({
   lastname: lastname.value,
 }));
 
-const validateEmail = (value: string) => {
+const validateEmail = (value: string): boolean => {
   const regex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
   return regex.test(value);
 };
@@ -37,41 +37,38 @@ const confirmRef = computed(() => {
   );
 });
 
-// First Name
+// First Name Validation
 const firstNameRef = computed(() => {
-  return !firstname.value ? true : false;
+  return !firstname.value;
 });
 
-// Last Name
+// Last Name Validation
 const lastNameRef = computed(() => {
-  return !lastname.value ? true : false;
+  return !lastname.value;
 });
 
-// Email
+// Email Validation
 const emailHelper = computed(() => {
   return !validateEmail(email.value) ? helpers.invalid : helpers.valid;
 });
-
 const emailRef = computed(() => {
-  return !validateEmail(email.value) ? true : false;
+  return !validateEmail(email.value);
 });
 
-// Password
+// Password Validation
 const passwordHelper = computed(() => {
   return !password.value ? helpers.invalid : helpers.valid;
 });
-
 const passwordRef = computed(() => {
-  return !password.value ? true : false;
+  return !password.value;
 });
 
-// Phone Number
+// Phone Number Validation
 const phoneNumberHelper = computed(() => {
   return !phoneNumber.value ? helpers.invalid : helpers.valid;
 });
-
 const phoneNumberRef = computed(() => {
-  return !phoneNumber.value ? true : false;
+  return !phoneNumber.value;
 });
 </script>
 
