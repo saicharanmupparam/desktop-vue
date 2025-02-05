@@ -1,39 +1,54 @@
 <template>
-    <a href="#" class="toggle-theme" @click="toggleTheme()">{{ getToggle() }}</a>
+    <a href="#" @click="toggleTheme">
+        <img :src="themeImage" alt="Toggle Theme" class="theme-transition">
+    </a>
 </template>
 
 <script setup lang="ts">
-function getToggle() {
-    const rootEl = document.documentElement;
-    if (rootEl.getAttribute('data-theme')?.includes('light')) {
-        return '🌞';
-    }
+import { computed, ref, onMounted } from 'vue';
+import lightModeSvg from '../assets/light-mode.svg';
+import nightModeSvg from '../assets/night-mode.svg';
 
-    return '🌜';
-}
+const theme = ref('light');
+
+onMounted(() => {
+    const savedTheme = document.documentElement.getAttribute('data-theme');
+    theme.value = savedTheme || (new Date().getHours() >= 6 && new Date().getHours() < 18 ? 'light' : 'dark');
+    document.documentElement.setAttribute('data-theme', theme.value);
+});
+
+const themeImage = computed(() => theme.value === 'light' ? lightModeSvg : nightModeSvg);
 
 function toggleTheme() {
-    const rootEl = document.documentElement;
-    const themeButton = document.querySelector('.toggle-theme')!;
-
-    if (rootEl.getAttribute('data-theme')?.includes('light')) {
-        rootEl.setAttribute('data-theme', 'dark')
-        themeButton.textContent = '🌜';
-    } else {
-        rootEl.setAttribute('data-theme', 'light')
-        themeButton.textContent = '🌞';
-    }
+    theme.value = theme.value === 'light' ? 'dark' : 'light';
+    document.documentElement.setAttribute('data-theme', theme.value);
 }
 </script>
 
-<style lang="scss">
-.toggle-theme {
+<style scoped lang="scss">
+a {
     cursor: pointer;
-    border: 1px solid;
-    border-radius: 10px;
+    display: flex;
+    align-items: center;
+}
 
-    &:hover {
-        --pico-text-decoration: none
-    }
+a::before {
+    height: 1.125rem;
+    margin-inline: var(--pico-nav-element-spacing-horizontal);
+    border-left: var(--pico-border-width) solid var(--pico-form-element-border-color);
+    content: "";
+}
+
+.theme-transition {
+    transition: filter 0.5s ease-in-out, transform 0.5s ease-in-out;
+}
+
+[data-theme="dark"] .theme-transition {
+    filter: invert(1);
+    transform: rotate(360deg);
+}
+
+[data-theme="light"] .theme-transition {
+    transform: rotate(0deg);
 }
 </style>
