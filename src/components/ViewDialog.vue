@@ -1,5 +1,6 @@
 <template>
-    <div :id="dialogId" popover=manual class="flex column">
+    <UseDraggable>
+        <div :id="dialogId" popover=manual class="flex column">
         <header>
             <p>
                 <strong>🗓️ {{ props.title }}!</strong>
@@ -16,9 +17,13 @@
             <button :popovertarget="dialogId" popovertargetaction="hide">Close</button>
         </footer>
     </div>
+    </UseDraggable>
 </template>
 
 <script lang="ts" setup>
+import UseDraggable from './UseDraggable.vue';
+
+
 const props = defineProps(['title', 'content'])
 const dialogId = (props.title as string).toLowerCase()
 console.log(props.title)
