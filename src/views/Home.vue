@@ -5,8 +5,8 @@ import ViewDialog from '../components/ViewDialog.vue';
 
 <template>
     <NavBar :isLoggedIn="true" />
-    <div class="home flex column">
-        <div class="flex1 o-auto">
+    <div class="home">
+        <div>
             <ViewDialog title="Profile">
                 <div>
                     <input type="text" name="text" placeholder="Text" aria-label="Text">
@@ -19,7 +19,7 @@ import ViewDialog from '../components/ViewDialog.vue';
 
                 <template v-slot:footer>
                     <!-- content for the footer slot -->
-                     <button :aria-busy="false" aria-label="Please wait…">Save</button>
+                    <button :aria-busy="false" aria-label="Please wait…">Save</button>
                 </template>
             </ViewDialog>
             <ViewDialog title="Settings" />

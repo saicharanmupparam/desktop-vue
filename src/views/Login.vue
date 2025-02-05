@@ -38,17 +38,16 @@
 </template>
 
 <script setup lang="ts">
-import { ref } from "vue";
-import { useRouter } from "vue-router";
-
-import loginService from "../services/login.service";
-import type { Login, User } from "../interfaces";
-import NavBar from "../components/NavBar.vue";
-import CreateUserDialog from "../components/CreateUserDialog.vue";
+import { ref } from 'vue';
+import { useRouter } from 'vue-router';
+import loginService from '../services/login.service';
+import type { Login, User } from '../interfaces';
+import NavBar from '../components/NavBar.vue';
+import CreateUserDialog from '../components/CreateUserDialog.vue';
 
 const loading = ref(false);
-const email = ref("");
-const password = ref(null);
+const email = ref('');
+const password = ref('');
 const toggle = ref(false);
 const isDialog = ref(false);
 const router = useRouter();
@@ -64,7 +63,7 @@ async function onSubmit() {
       await fetchData(email.value);
     }
   } catch (error) {
-    console.error("An error occurred:", error);
+    console.error('An error occurred:', error);
   } finally {
     loading.value = false;
   }
@@ -74,14 +73,14 @@ async function fetchData(email: string) {
   try {
     const { data, error } = await loginService.login({ email });
     if (error) {
-      console.log("AuthApiError: Signups not allowed for otp", error);
+      console.log('AuthApiError: Signups not allowed for OTP', error);
       isDialog.value = true;
     } else {
-      console.log("Sign in Try", data);
+      console.log('Sign in Try', data);
       toggle.value = true;
     }
   } catch (error) {
-    console.error("Sign In Error:", error);
+    console.error('Sign In Error:', error);
   } finally {
     loading.value = false;
   }
@@ -90,27 +89,32 @@ async function fetchData(email: string) {
 async function verifyUser(form: Login) {
   try {
     const { data, error } = await loginService.verify(form);
-    console.log("Verify:", data, error);
-    if(data) {
-      localStorage.setItem('session', JSON.stringify((data.user?.user_metadata)))
+    if (data) {
+      localStorage.setItem('session', JSON.stringify(data.user?.user_metadata));
+      router.push('home');
+    } else {
+      console.error('Verify Error:', error);
     }
-    router.push("home");
   } catch (error) {
-    console.error("Verify Error:", error);
+    console.error('Verify Error:', error);
   } finally {
     loading.value = false;
   }
 }
 
 async function createUser(event: User) {
+  loading.value = true;
   try {
-    // First, register the user
     const { data, error } = await loginService.signUp(event);
-    console.log("createUser:", data, error);
-    closeDialog();
-    toggle.value = true;
+    if (data) {
+      closeDialog();
+      toggle.value = true;
+      console.log('createUser:', data);
+    } else {
+      console.error('SignUp Error:', error);
+    }
   } catch (error) {
-    console.error("SignUp Error:", error);
+    console.error('SignUp Error:', error);
   } finally {
     loading.value = false;
   }
